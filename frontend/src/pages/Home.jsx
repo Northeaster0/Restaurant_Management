@@ -35,12 +35,6 @@ function Home() {
           Mutfak Paneli
         </button>
         <button
-          onClick={() => navigate('/order')}
-          className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200"
-        >
-          Siparişler
-        </button>
-        <button
           onClick={() => navigate('/reports')}
           className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200"
         >
