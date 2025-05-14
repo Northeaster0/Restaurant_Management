@@ -118,6 +118,9 @@ const CustomerOrder = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {menu.map(item => (
             <div key={item.id} className="bg-white rounded-lg shadow p-6 flex flex-col">
+              {item.image_url && (
+                <img src={item.image_url} alt={item.name} className="w-full h-40 object-cover rounded mb-4" />
+              )}
               <h2 className="text-xl font-semibold mb-2">{item.name}</h2>
               <p className="text-gray-600 mb-2">{item.description}</p>
               <div className="mt-auto flex items-center justify-between">

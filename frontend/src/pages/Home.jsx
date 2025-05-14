@@ -21,7 +21,7 @@ function Home() {
       <h1 className="text-5xl font-bold text-gray-800 mb-8">
         Restoran Yönetim Sistemi
       </h1>
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap justify-center">
         <button
           onClick={() => navigate('/menu')}
           className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200"
@@ -35,16 +35,37 @@ function Home() {
           Mutfak Paneli
         </button>
         <button
-          onClick={() => navigate('/update_menu_items')}
-          className="px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-200"
+          onClick={() => navigate('/order')}
+          className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200"
         >
-          Menüyü Güncelle
+          Siparişler
         </button>
         <button
-          onClick={() => navigate('/tables')}
+          onClick={() => navigate('/reports')}
+          className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200"
+        >
+          Raporlar
+        </button>
+        <button
+          onClick={() => navigate('/payments')}
+          className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 transition-colors duration-200"
+        >
+          Ödeme
+        </button>
+      </div>
+      <div className="flex gap-4 flex-wrap justify-center mt-6">
+        <button
+          onClick={() => {
+            const pwd = prompt('Admin şifresini girin:');
+            if (pwd === '123') {
+              navigate('/tables');
+            } else if (pwd !== null) {
+              alert('Hatalı şifre!');
+            }
+          }}
           className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-200"
         >
-          Masalar
+          Masaları Düzenle
         </button>
         <button
           onClick={() => {
@@ -60,10 +81,10 @@ function Home() {
           Çalışanlar
         </button>
         <button
-          onClick={() => navigate('/reports')}
-          className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200"
+          onClick={() => navigate('/update_menu_items')}
+          className="px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-200"
         >
-          Raporlar
+          Menüyü Güncelle
         </button>
       </div>
     </div>

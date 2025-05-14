@@ -7,9 +7,9 @@ const Tables = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [editModal, setEditModal] = useState({ open: false, table: null });
-  const [editForm, setEditForm] = useState({ name: '', type: '', description: '' });
+  const [editForm, setEditForm] = useState({ name: '', type: '', description: '', username: '', password: '' });
   const [addModal, setAddModal] = useState(false);
-  const [addForm, setAddForm] = useState({ name: '', type: '', description: '' });
+  const [addForm, setAddForm] = useState({ name: '', type: '', description: '', username: '', password: '' });
   const navigate = useNavigate();
 
   const fetchTables = async () => {
@@ -43,7 +43,13 @@ const Tables = () => {
 
   // Güncelle butonuna tıkla
   const handleEditClick = (table) => {
-    setEditForm({ name: table.name, type: table.type, description: table.description });
+    setEditForm({
+      name: table.name,
+      type: table.type,
+      description: table.description,
+      username: table.username || '',
+      password: table.password || ''
+    });
     setEditModal({ open: true, table });
   };
 
@@ -90,7 +96,7 @@ const Tables = () => {
       if (!response.ok) throw new Error('Masa eklenemedi');
       setSuccess('Masa başarıyla eklendi!');
       setAddModal(false);
-      setAddForm({ name: '', type: '', description: '' });
+      setAddForm({ name: '', type: '', description: '', username: '', password: '' });
       fetchTables();
     } catch (err) {
       setError('Masa eklenirken bir hata oluştu.');
@@ -197,6 +203,28 @@ const Tables = () => {
                     rows="2"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Kullanıcı Adı</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={editForm.username}
+                    onChange={handleEditFormChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Şifre</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={editForm.password}
+                    onChange={handleEditFormChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                  />
+                </div>
                 <div className="flex justify-end gap-2 mt-4">
                   <button
                     type="button"
@@ -255,6 +283,28 @@ const Tables = () => {
                     onChange={handleAddFormChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     rows="2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Kullanıcı Adı</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={addForm.username}
+                    onChange={handleAddFormChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Şifre</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={addForm.password}
+                    onChange={handleAddFormChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
                   />
                 </div>
                 <div className="flex justify-end gap-2 mt-4">

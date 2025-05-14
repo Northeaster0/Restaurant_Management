@@ -12,6 +12,8 @@ import CustomerOrder from './pages/CustomerOrder';
 import { CartProvider } from './context/CartContext';
 import { CustomerCartProvider } from './context/CustomerCartContext';
 import Reports from './pages/Reports';
+import Payments from './pages/Payments';
+import PaymentMethod from './pages/PaymentMethod';
 
 function RequireAuth({ children }) {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -39,6 +41,8 @@ function App() {
             <Route path="/tables" element={<RequireAuth><Tables /></RequireAuth>} />
             <Route path="/staff" element={<RequireAuth><Staff /></RequireAuth>} />
             <Route path="/reports" element={<RequireAuth><Reports /></RequireAuth>} />
+            <Route path="/payments" element={<RequireAuth><Payments /></RequireAuth>} />
+            <Route path="/payment-method" element={<RequireAuth><PaymentMethod /></RequireAuth>} />
           </Routes>
         </Router>
       </CustomerCartProvider>
