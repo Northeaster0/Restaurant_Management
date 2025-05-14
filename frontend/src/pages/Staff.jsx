@@ -11,10 +11,14 @@ const Staff = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [addModal, setAddModal] = useState(false);
-  const [addForm, setAddForm] = useState({ name: '', hire_date: '' });
+  const [addForm, setAddForm] = useState({ name: '', hire_date: '', work_hours: '' });
   const [success, setSuccess] = useState('');
   const [editModal, setEditModal] = useState({ open: false, person: null });
-  const [editForm, setEditForm] = useState({ name: '', hire_date: '' });
+  const [editForm, setEditForm] = useState({ name: '', hire_date: '', work_hours: '' });
+  const [addStartTime, setAddStartTime] = useState('');
+  const [addEndTime, setAddEndTime] = useState('');
+  const [editStartTime, setEditStartTime] = useState('');
+  const [editEndTime, setEditEndTime] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +53,9 @@ const Staff = () => {
       if (!response.ok) throw new Error('Çalışan eklenemedi');
       setSuccess('Çalışan başarıyla eklendi!');
       setAddModal(false);
-      setAddForm({ name: '', hire_date: '' });
+      setAddForm({ name: '', hire_date: '', work_hours: '' });
+      setAddStartTime('');
+      setAddEndTime('');
       // Yeniden yükle
       setLoading(true);
       const res = await fetch('http://localhost:3000/staff');
@@ -75,8 +81,21 @@ const Staff = () => {
     }
   };
 
+  const openAddModal = () => {
+    setAddForm({ name: '', hire_date: '', work_hours: '' });
+    setAddStartTime('');
+    setAddEndTime('');
+    setAddModal(true);
+  };
+
   const handleEditClick = (person) => {
-    setEditForm({ name: person.name, hire_date: person.hire_date.slice(0, 10) });
+    let start = '', end = '';
+    if (person.work_hours && person.work_hours.includes('-')) {
+      [start, end] = person.work_hours.split('-');
+    }
+    setEditForm({ name: person.name, hire_date: person.hire_date.slice(0, 10), work_hours: person.work_hours || '' });
+    setEditStartTime(start);
+    setEditEndTime(end);
     setEditModal({ open: true, person });
   };
 
@@ -106,6 +125,22 @@ const Staff = () => {
     }
   };
 
+  const handleAddTimeChange = (type, value) => {
+    if (type === 'start') setAddStartTime(value);
+    else setAddEndTime(value);
+    const start = type === 'start' ? value : addStartTime;
+    const end = type === 'end' ? value : addEndTime;
+    setAddForm(prev => ({ ...prev, work_hours: start && end ? `${start}-${end}` : '' }));
+  };
+
+  const handleEditTimeChange = (type, value) => {
+    if (type === 'start') setEditStartTime(value);
+    else setEditEndTime(value);
+    const start = type === 'start' ? value : editStartTime;
+    const end = type === 'end' ? value : editEndTime;
+    setEditForm(prev => ({ ...prev, work_hours: start && end ? `${start}-${end}` : '' }));
+  };
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center bg-gray-100 text-2xl text-gray-600">Yükleniyor...</div>;
   }
@@ -128,7 +163,7 @@ const Staff = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800 text-center">Çalışanlar</h1>
           <button
-            onClick={() => setAddModal(true)}
+            onClick={openAddModal}
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold shadow"
           >
             + Çalışan Ekle
@@ -146,6 +181,7 @@ const Staff = () => {
                 <th className="py-3 px-4 border-b text-left">ID</th>
                 <th className="py-3 px-4 border-b text-left">İsim</th>
                 <th className="py-3 px-4 border-b text-left">İşe Başlama Tarihi</th>
+                <th className="py-3 px-4 border-b text-left">Çalışma Saatleri</th>
                 <th className="py-3 px-4 border-b text-right">İşlem</th>
               </tr>
             </thead>
@@ -155,6 +191,7 @@ const Staff = () => {
                   <td className="py-2 px-4 border-b">{person.id}</td>
                   <td className="py-2 px-4 border-b">{person.name}</td>
                   <td className="py-2 px-4 border-b">{formatDate(person.hire_date)}</td>
+                  <td className="py-2 px-4 border-b">{person.work_hours}</td>
                   <td className="py-2 px-4 border-b text-right">
                     <button
                       onClick={() => handleEditClick(person)}
@@ -205,6 +242,24 @@ const Staff = () => {
                     required
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Çalışma Saatleri</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="time"
+                      value={addStartTime}
+                      onChange={e => handleAddTimeChange('start', e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                    <span className="mt-2">-</span>
+                    <input
+                      type="time"
+                      value={addEndTime}
+                      onChange={e => handleAddTimeChange('end', e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
                 <div className="flex justify-end gap-2 mt-4">
                   <button
                     type="button"
@@ -254,6 +309,24 @@ const Staff = () => {
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Çalışma Saatleri</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="time"
+                      value={editStartTime}
+                      onChange={e => handleEditTimeChange('start', e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                    <span className="mt-2">-</span>
+                    <input
+                      type="time"
+                      value={editEndTime}
+                      onChange={e => handleEditTimeChange('end', e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  </div>
                 </div>
                 <div className="flex justify-end gap-2 mt-4">
                   <button

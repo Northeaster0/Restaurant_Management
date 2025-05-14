@@ -41,14 +41,7 @@ function Home() {
           Menüyü Güncelle
         </button>
         <button
-          onClick={() => {
-            const pwd = prompt('Admin şifresini girin:');
-            if (pwd === '123') {
-              navigate('/tables');
-            } else if (pwd !== null) {
-              alert('Hatalı şifre!');
-            }
-          }}
+          onClick={() => navigate('/tables')}
           className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-200"
         >
           Masalar
@@ -65,6 +58,12 @@ function Home() {
           className="px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg shadow-md hover:bg-pink-700 transition-colors duration-200"
         >
           Çalışanlar
+        </button>
+        <button
+          onClick={() => navigate('/reports')}
+          className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200"
+        >
+          Raporlar
         </button>
       </div>
     </div>

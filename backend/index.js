@@ -366,13 +366,13 @@ app.get('/staff', (req, res) => {
 
 // Yeni çalışan ekle
 app.post('/staff', (req, res) => {
-  const { name, hire_date } = req.body;
+  const { name, hire_date, work_hours } = req.body;
   if (!name || !hire_date) {
     return res.status(400).json({ error: 'İsim ve işe başlama tarihi zorunludur.' });
   }
   db.query(
-    'INSERT INTO staff (name, hire_date) VALUES (?, ?)',
-    [name, hire_date],
+    'INSERT INTO staff (name, hire_date, work_hours) VALUES (?, ?, ?)',
+    [name, hire_date, work_hours || ''],
     (err, result) => {
       if (err) {
         return res.status(500).json({ error: 'Çalışan eklenirken bir hata oluştu.' });
@@ -399,13 +399,13 @@ app.delete('/staff/:id', (req, res) => {
 // Çalışan güncelle
 app.put('/staff/:id', (req, res) => {
   const { id } = req.params;
-  const { name, hire_date } = req.body;
+  const { name, hire_date, work_hours } = req.body;
   if (!name || !hire_date) {
     return res.status(400).json({ error: 'İsim ve işe başlama tarihi zorunludur.' });
   }
   db.query(
-    'UPDATE staff SET name = ?, hire_date = ? WHERE id = ?',
-    [name, hire_date, id],
+    'UPDATE staff SET name = ?, hire_date = ?, work_hours = ? WHERE id = ?',
+    [name, hire_date, work_hours || '', id],
     (err, result) => {
       if (err) {
         return res.status(500).json({ error: 'Çalışan güncellenirken bir hata oluştu.' });
@@ -432,6 +432,24 @@ app.post('/customer_login', (req, res) => {
         return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
       }
       res.json({ message: 'Giriş başarılı', table: results[0] });
+    }
+  );
+});
+
+// En popüler ürünleri getir
+app.get('/popular_items', (req, res) => {
+  db.query(
+    `SELECT m.id, m.name, m.description, m.price, m.image_url, COALESCE(SUM(oi.quantity), 0) as total_ordered
+     FROM menu_items m
+     LEFT JOIN order_items oi ON m.id = oi.menu_item_id
+     GROUP BY m.id, m.name, m.description, m.price, m.image_url
+     ORDER BY total_ordered DESC, m.name ASC`,
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json(results);
     }
   );
 });
