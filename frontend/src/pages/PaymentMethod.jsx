@@ -7,7 +7,7 @@ const PaymentMethod = () => {
   const table = location.state?.table;
 
   const handlePayment = (method) => {
-    alert(`Ödeme başarılı! (${method})`);
+    alert('Bu işlev henüz eklenmemiştir');
     navigate('/payments');
   };
 
